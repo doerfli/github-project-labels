@@ -59,11 +59,13 @@ post '/card_moved' do
   puts "issue #{issue_id}  labels -#{label_remove} +#{label_add}"
 
   label_remove_url = "#{GITHUB_API_BASE_URL}/repos/#{GITHUB_REPO}/issues/#{issue_id}/labels/#{label_remove}"
+  puts label_remove_url
   response = RestClient.delete(label_remove_url, :Authorization => "token #{ENV['ACCESS_TOKEN']}")
 
   puts "label removed"
 
   label_add_url = "#{GITHUB_API_BASE_URL}/repos/#{GITHUB_REPO}/issues/#{issue_id}/labels"
+  puts label_add_url
   response = RestClient.post(label_add_url, [label_add], :accept => 'application/vnd.github.inertia-preview+json', :Authorization => "token #{ENV['ACCESS_TOKEN']}")
 
   puts "label added"
