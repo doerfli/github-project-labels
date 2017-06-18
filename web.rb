@@ -68,7 +68,7 @@ post '/card_moved' do
 
   label_add_url = "#{card_content_url}/labels"
   puts label_add_url
-  response = RestClient.post(label_add_url, [label_add], :accept => 'application/vnd.github.inertia-preview+json', :Authorization => "token #{ENV['ACCESS_TOKEN']}")
+  response = RestClient.post(label_add_url, [label_add].to_json, :content_type => :json, :accept => 'application/vnd.github.inertia-preview+json', :Authorization => "token #{ENV['ACCESS_TOKEN']}")
 
   puts "label added"
 
