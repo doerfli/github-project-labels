@@ -60,13 +60,13 @@ post '/card_moved' do
   card_content_url = @request_payload['project_card']['content_url']
 
   #label_remove_url = "#{GITHUB_API_BASE_URL}/repos/#{GITHUB_REPO}/issues/#{issue_id}/labels/#{label_remove}"
-  label_remove_url = "#{content_url}/labels/#{label_remove}"
+  label_remove_url = "#{card_content_url}/labels/#{label_remove}"
   puts label_remove_url
   response = RestClient.delete(label_remove_url, :Authorization => "token #{ENV['ACCESS_TOKEN']}")
 
   puts "label removed"
 
-  label_add_url = "#{content_url}/labels"
+  label_add_url = "#{card_content_url}/labels"
   puts label_add_url
   response = RestClient.post(label_add_url, [label_add], :accept => 'application/vnd.github.inertia-preview+json', :Authorization => "token #{ENV['ACCESS_TOKEN']}")
 
