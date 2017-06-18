@@ -19,8 +19,8 @@ end
 
 post '/card_moved' do
   #puts @request_payload
-  puts 'card is note' && return 'Card is note - no labels to change' if @request_payload['project_card']['note'] != nil
-  puts 'action was not move' && return 'Action was not move' if @request_payload['action'] != 'moved'
+  return 'Card is note - no labels to change' if @request_payload['project_card']['note'] != nil
+  return 'Action was not move' if @request_payload['action'] != 'moved'
 
   labels = {}
   response = RestClient.get(GITHUB_LABELS_URL, :Authorization => "token #{ENV['ACCESS_TOKEN']}")
