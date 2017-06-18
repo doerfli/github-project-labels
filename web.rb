@@ -3,8 +3,12 @@ require 'rest-client'
 require 'json'
 require 'oauth'
 
+# the name of the github repository where the project and issues are located
 GITHUB_REPO = 'doerfli/github-project-labels'
+# the name of the project to track
 PROJECT_NAME = 'Sample Project'
+# the secret to verify the source of the request
+SECRET = ''
 
 GITHUB_API_BASE_URL = 'https://api.github.com'
 GITHUB_LABELS_URL = "#{GITHUB_API_BASE_URL}/repos/#{GITHUB_REPO}/labels"
@@ -59,18 +63,17 @@ post '/card_moved' do
   puts "issue #{issue_id}  labels -#{label_remove} +#{label_add}"
   card_content_url = @request_payload['project_card']['content_url']
 
-  #label_remove_url = "#{GITHUB_API_BASE_URL}/repos/#{GITHUB_REPO}/issues/#{issue_id}/labels/#{label_remove}"
-  label_remove_url = "#{card_content_url}/labels/#{label_remove}"
+  label_remove_url = "#{card_content_url}/labels/#{URI.escape(label_remove)}"
   puts label_remove_url
   response = RestClient.delete(label_remove_url, :Authorization => "token #{ENV['ACCESS_TOKEN']}")
 
-  puts "label removed"
+  puts "label removed: #{label_remove}"
 
   label_add_url = "#{card_content_url}/labels"
   puts label_add_url
   response = RestClient.post(label_add_url, [label_add].to_json, :content_type => :json, :accept => 'application/vnd.github.inertia-preview+json', :Authorization => "token #{ENV['ACCESS_TOKEN']}")
 
-  puts "label added"
+  puts "label added: #{label_add}"
 
   "issue #{issue_id}  labels -#{label_remove} +#{label_add}"
 end
