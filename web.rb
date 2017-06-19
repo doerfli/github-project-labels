@@ -61,12 +61,12 @@ post '/card_moved' do
 
   # extract issues, labels and columns
   issue_id = @request_payload['project_card']['id']
-  column_id_from = @request_payload['changes']['column_id']['from']
-  column_id_to = @request_payload['project_card']['column_id']
   unless card_added
+    column_id_from = @request_payload['changes']['column_id']['from']
     label_remove = columns[column_id_from]
     return 'from column not found' if label_remove.nil?
   end
+  column_id_to = @request_payload['project_card']['column_id']
   label_add = columns[column_id_to]
   return 'to column not found' if label_add.nil?
 
