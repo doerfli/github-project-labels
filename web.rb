@@ -4,13 +4,13 @@ require 'json'
 require 'oauth'
 
 # the name of the github repository where the project and issues are located
-GITHUB_REPO = ENV['GITHUB_REPO'] #'doerfli/github-project-labels'
+#GITHUB_REPO = ENV['GITHUB_REPO'] #'doerfli/github-project-labels'
 # the name of the project to track
 PROJECT_NAMES = ENV['PROJECT_NAMES'].split(';').map{ |n| n.strip } #['Sample Project', 'Another project']
 
 GITHUB_API_BASE_URL = 'https://api.github.com'
-GITHUB_LABELS_URL = "#{GITHUB_API_BASE_URL}/repos/#{GITHUB_REPO}/labels"
-GITHUB_PROJECTS_URL = "#{GITHUB_API_BASE_URL}/repos/#{GITHUB_REPO}/projects"
+#GITHUB_LABELS_URL = "#{GITHUB_API_BASE_URL}/repos/#{GITHUB_REPO}/labels"
+#GITHUB_PROJECTS_URL = "#{GITHUB_API_BASE_URL}/repos/#{GITHUB_REPO}/projects"
 
 before do
   request.body.rewind
@@ -26,7 +26,8 @@ post '/card_moved' do
 
   # get all labels
   labels = {}
-  response = RestClient.get(GITHUB_LABELS_URL, :Authorization => "token #{ENV['ACCESS_TOKEN']}")
+  github_labels_url = "#{@request_payload['repository']['url']}/labels"
+  response = RestClient.get(github_labels_url, :Authorization => "token #{ENV['ACCESS_TOKEN']}")
   labels_json = JSON.parse(response)
   labels_json.each { |lab|
     labels[lab['name']] = {
@@ -39,7 +40,8 @@ post '/card_moved' do
 
   # get all projects in repository
   projects = {}
-  response = RestClient.get(GITHUB_PROJECTS_URL, :accept => 'application/vnd.github.inertia-preview+json', :Authorization => "token #{ENV['ACCESS_TOKEN']}")
+  github_projects_url = "#{@request_payload['repository']['url']}/projects"
+  response = RestClient.get(github_projects_url, :accept => 'application/vnd.github.inertia-preview+json', :Authorization => "token #{ENV['ACCESS_TOKEN']}")
   projects_json = JSON.parse(response)
   projects_json.each { |prj|
     # puts prj
