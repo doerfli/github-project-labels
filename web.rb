@@ -4,9 +4,9 @@ require 'json'
 require 'oauth'
 
 # the name of the github repository where the project and issues are located
-GITHUB_REPO = 'doerfli/github-project-labels'
+GITHUB_REPO = ENV['GITHUB_REPO'] #'doerfli/github-project-labels'
 # the name of the project to track
-PROJECT_NAME = 'Sample Project'
+PROJECT_NAMES = ENV['PROJECT_NAMES'].split(';') #['Sample Project', 'Another project']
 
 GITHUB_API_BASE_URL = 'https://api.github.com'
 GITHUB_LABELS_URL = "#{GITHUB_API_BASE_URL}/repos/#{GITHUB_REPO}/labels"
@@ -43,22 +43,26 @@ post '/card_moved' do
   }
 
   columns = {}
-  columns_url = "#{GITHUB_API_BASE_URL}/projects/#{projects[PROJECT_NAME]}/columns"
-  response = RestClient.get(columns_url, :accept => 'application/vnd.github.inertia-preview+json', :Authorization => "token #{ENV['ACCESS_TOKEN']}")
-  columns_json = JSON.parse(response)
-  columns_json.each { |col|
-    # puts col
-    columns[col['id']] = col['name']
+  PROJECT_NAMES.each{ |prj_name|
+    columns_url = "#{GITHUB_API_BASE_URL}/projects/#{projects[prj_name]}/columns"
+    response = RestClient.get(columns_url, :accept => 'application/vnd.github.inertia-preview+json', :Authorization => "token #{ENV['ACCESS_TOKEN']}")
+    columns_json = JSON.parse(response)
+    columns_json.each { |col|
+      # puts col
+      columns[col['id']] = col['name']
+    }
   }
-  #puts columns
+  puts columns
 
   issue_id = @request_payload['project_card']['id']
   column_id_from = @request_payload['changes']['column_id']['from']
   column_id_to = @request_payload['project_card']['column_id']
   label_remove = columns[column_id_from]
+  return 'from column not found' if label_remove.nil?
   label_add = columns[column_id_to]
+  return 'to column not found' if label_add.nil?
 
-  puts "issue #{issue_id}  labels -#{label_remove} +#{label_add}"
+  puts "issue #{issue_id} labels -#{label_remove} +#{label_add}"
   card_content_url = @request_payload['project_card']['content_url']
 
   label_remove_url = "#{card_content_url}/labels/#{URI.escape(label_remove)}"
