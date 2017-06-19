@@ -3,14 +3,9 @@ require 'rest-client'
 require 'json'
 require 'oauth'
 
-# the name of the github repository where the project and issues are located
-#GITHUB_REPO = ENV['GITHUB_REPO'] #'doerfli/github-project-labels'
 # the name of the project to track
-PROJECT_NAMES = ENV['PROJECT_NAMES'].split(';').map{ |n| n.strip } #['Sample Project', 'Another project']
-
+PROJECT_NAMES = ENV['PROJECT_NAMES'].split(';').map{ |n| n.strip }
 GITHUB_API_BASE_URL = 'https://api.github.com'
-#GITHUB_LABELS_URL = "#{GITHUB_API_BASE_URL}/repos/#{GITHUB_REPO}/labels"
-#GITHUB_PROJECTS_URL = "#{GITHUB_API_BASE_URL}/repos/#{GITHUB_REPO}/projects"
 
 before do
   request.body.rewind
