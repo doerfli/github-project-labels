@@ -1,7 +1,6 @@
 require 'sinatra'
 require 'rest-client'
 require 'json'
-require 'oauth'
 
 # the name of the project to track
 PROJECT_NAMES = ENV['PROJECT_NAMES'].split(';').map{ |n| n.strip }
