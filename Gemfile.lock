@@ -10,7 +10,6 @@ GEM
     mime-types-data (3.2016.0521)
     mustermann (1.0.0)
     netrc (0.11.0)
-    oauth (0.5.3)
     rack (2.0.3)
     rack-protection (2.0.0)
       rack
@@ -32,7 +31,6 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  oauth (~> 0.5.3)
   rack (~> 2.0)
   rest-client (~> 2.0)
   sinatra (= 2.0.0)
