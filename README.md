@@ -2,8 +2,6 @@
 
 This script will __automatically update Github issue labels__ when an issue card is moved from one column of your __project board__ to the next. The issue labels must have matching names with the columns of the project for this hook to work.
 
-See a video of the script in action: https://youtu.be/BQw7W6TZdSU (as the update requires multiple requests to Github to retrieve resources, there is a small delay before the update occurs after moving the card).
-
 ## Preconditions
 
 * Github project with _Project_ board that has multiple columns
